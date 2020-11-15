@@ -1,4 +1,8 @@
+require 'bcrypt'
+
 class User < ApplicationRecord
+  include BCrypt
+
   has_many :registrations, dependent: :destroy
   has_many :courses, through: :registrations
   validates :first_name, :last_name, :pennkey, :password_hash, presence: true
@@ -14,6 +18,15 @@ class User < ApplicationRecord
 
   def self.instructors
     User.where(is_instructor: true)
+  end
+
+  def password
+    @password ||= Password.new(password_hash)
+  end
+
+  def password=(new_password)
+    @password = Password.create(new_password)
+    self.password_hash = @password
   end
 
 end

@@ -1,6 +1,7 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user
+  
   # GET /courses
   # GET /courses.json
   def index
@@ -25,9 +26,10 @@ class CoursesController < ApplicationController
   # POST /courses.json
   def create
     @course = Course.new(course_params)
-
     respond_to do |format|
       if @course.save
+        @course = @user.posts.build
+        @course.assign_attributes(course_params)
         format.html { redirect_to @course, notice: 'Course was successfully created.' }
         format.json { render :show, status: :created, location: @course }
       else
@@ -64,6 +66,7 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
+      #binding.pry
       @course = Course.find(params[:id])
     end
 

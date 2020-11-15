@@ -22,7 +22,7 @@ class Course < ApplicationRecord
 
   def students
     course = Course.find(id)
-    course.users.where(is_instructor: false)
+    course.users.where(is_instructor: false).to_a
   end
 
 end
