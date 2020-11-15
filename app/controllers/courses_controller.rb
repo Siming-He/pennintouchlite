@@ -3,7 +3,7 @@ class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user
   before_action :ensure_admin_instructor, only: [:edit, :update, :destroy]
-  before_action :is_instuctor?, only: [:new, :create, :update, :destroy]
+  before_action :instuctor?, only: [:new, :create, :update, :destroy]
 
   # GET /courses
   # GET /courses.json
@@ -67,22 +67,24 @@ class CoursesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_course
-      #binding.pry
-      @course = Course.find(params[:id])
-    end
+  
+  # Use callbacks to share common setup or constraints between actions.
+  def set_course
+    @course = Course.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def course_params
-      params.require(:course).permit(:department_id, :code, :title, :description)
-    end
+  # Only allow a list of trusted parameters through.
+  def course_params
+    params.require(:course).permit(:department_id, :code, :title, :description)
+  end
 
-    def ensure_admin_instructor
-      redirect_to courses_path unless (@course.users.include?(User.find(session[:user_id])) && User.find(session[:user_id]).is_instructor)
+  def ensure_admin_instructor
+    unless @course.users.include?(User.find(session[:user_id])) && User.find(session[:user_id]).is_instructor
+      redirect_to courses_path 
     end
+  end
 
-    def is_instuctor?
-      redirect_to courses_path unless (User.find(session[:user_id]).is_instructor)
-    end
+  def instuctor?
+    redirect_to courses_path unless User.find(session[:user_id]).is_instructor
+  end
 end
