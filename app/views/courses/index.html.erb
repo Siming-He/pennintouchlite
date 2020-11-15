@@ -9,8 +9,8 @@
             <h5 class="card-title"><%= course.full_code() %></h5>
             <h6 class="card-sibtitle mb-4 text-secondary"><%= course.instructor() %></h6>
             <p class="card-text"><%= course.description.first(120) %></p>
-            <%a href="/courses/#{course.id}" %>
-              <button type="button" class="btn btn-outline-secondary">Show</Button>
+            <a href="/courses/<%= course.id %>">
+              <button type="button" class="btn btn-secondary">Show</button>
             </a>
           </div>
         </div>
@@ -18,32 +18,6 @@
     <% end %>
   </div> 
 </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Department</th>
-      <th>Code</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @courses.each do |course| %>
-      <tr>
-        <td><%= course.department.name %></td>
-        <td><%= course.code %></td>
-        <td><%= course.title %></td>
-        <td><%= course.description %></td>
-        <td><%= link_to 'Show', course %></td>
-        <td><%= link_to 'Edit', edit_course_path(course) %></td>
-        <td><%= link_to 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <br>
 
