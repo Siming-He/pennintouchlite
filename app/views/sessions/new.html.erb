@@ -21,5 +21,7 @@
 	<%= form.password_field :Password %>
   <br>
   <br>
-	<%= form.submit :Login %>
+  <div class="actions">
+    <input type="submit" name="commit" value="Login" class="btn btn-secondary" data-disable-with="Submit">
+  </div>
 <% end %>
