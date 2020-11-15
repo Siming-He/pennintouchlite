@@ -2,5 +2,6 @@
 
 <%= render 'form', user: @user %>
 
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+<a href="<%= user_path(@user) %>">
+    <button type="button" class="btn btn-outline-primary">Back</button>
+</a>

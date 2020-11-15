@@ -1,7 +1,10 @@
+require 'pry'
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user
-  
+  before_action :ensure_admin_instructor, only: [:edit, :update, :destroy]
+  before_action :is_instuctor?, only: [:new, :create, :update, :destroy]
+
   # GET /courses
   # GET /courses.json
   def index
@@ -28,7 +31,7 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
     respond_to do |format|
       if @course.save
-        @course = @user.posts.build
+        @course.instructor = User.find(session[:user_id])
         @course.assign_attributes(course_params)
         format.html { redirect_to @course, notice: 'Course was successfully created.' }
         format.json { render :show, status: :created, location: @course }
@@ -73,5 +76,13 @@ class CoursesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def course_params
       params.require(:course).permit(:department_id, :code, :title, :description)
+    end
+
+    def ensure_admin_instructor
+      redirect_to courses_path unless (@course.users.include?(User.find(session[:user_id])) && User.find(session[:user_id]).is_instructor)
+    end
+
+    def is_instuctor?
+      redirect_to courses_path unless (User.find(session[:user_id]).is_instructor)
     end
 end

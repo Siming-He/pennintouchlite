@@ -2,5 +2,6 @@
 
 <%= render 'form', course: @course %>
 
-<%= link_to 'Show', @course %> |
-<%= link_to 'Back', courses_path %>
+<a href="<%= course_path(@course) %>">
+    <button type="button" class="btn btn-outline-primary">Back</button>
+</a>

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
 
   # TODO: add/drop courses routes (see /controllers/registrations_controller.rb)
-
+  get 'add_course/:user_id/:course_id', to: 'registrations#add_course'
+  get 'drop_course/:user_id/:course_id', to: 'registrations#drop_course'
 
 end

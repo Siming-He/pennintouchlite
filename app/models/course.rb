@@ -12,12 +12,30 @@ class Course < ApplicationRecord
   def instructor
     course = Course.find(id)
     user_cur = course.users.find_by(is_instructor: true)
+  end
+
+  def instructor_name
+    course = Course.find(id)
+    user_cur = course.users.find_by(is_instructor: true)
     user_cur[:last_name] + ", " + user_cur[:first_name]
   end
 
   def instructor=(user)
     if user.is_instructor
       Registration.create({course: Course.find(id), user: user})
+    end
+  end
+
+  def student=(user)
+    if !user.is_instructor
+      Registration.create({course: Course.find(id), user: user})
+    end
+  end
+
+  def student_drop=(user)
+    if !user.is_instructor
+      Registration.create({course: Course.find(id), user: user})
+      Registration.find_by(user_id: user.id).destroy
     end
   end
 

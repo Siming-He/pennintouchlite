@@ -1,3 +1,5 @@
+<script src="https://kit.fontawesome.com/1d9373cc66.js" crossorigin="anonymous"></script>
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -16,14 +18,57 @@
 </p>
 
 <p>
-  <strong>Is instructor:</strong>
-  <%= @user.is_instructor %>
+  <strong>Status:</strong>
+  <% if @user.is_instructor %>
+    Instructor
+  <% else %>
+    Student
+  <% end %>
 </p>
 
-<p>
-  <strong>Password hash:</strong>
-  <%= @user.password_hash %>
-</p>
+<% if User.find(session[:user_id]) == @user %>
+  <a href="<%= edit_user_path(@user) %>">
+    <button type="button" class="btn btn-outline-primary">Edit</button>
+  </a>
+<% end %>
+<a href="<%= users_path %>">
+  <button type="button" class="btn btn-outline-primary">Back</button>
+</a>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<div class="container">
+  <% if User.find(session[:user_id]).is_instructor %>
+    <h2>Courses Teaching</h2>
+  <% else %>
+    <h2>Courses Taking</h2>
+  <% end %>
+
+  <div class="row">
+    <% User.find(session[:user_id]).courses.each do |course| %>
+      <% if course.users.include?(User.find(params[:id])) %>
+        <div class="col-6" style="padding: 10px;">
+          <div class="card" style="width: 100%;">
+            <div class="card-body">
+              <h5 class="card-title"><%= course.full_code() %></h5>
+              <h6 class="card-sibtitle mb-4 text-secondary">
+                <%= course.instructor_name() %>
+              </h6>
+              <p class="card-text"><%= course.description.first(120) %></p>
+              <a href="/courses/<%= course.id %>">
+                <button type="button" class="btn btn-secondary">Show</button>
+              </a>
+              <% if User.find(session[:user_id]).is_instructor && course.instructor() == User.find(session[:user_id]) %>
+                <a href="/courses/<%= course.id %>">
+                <button type="button" class="btn btn-outline-secondary"><i class="far fa-edit"></i> Edit</button>
+                </a>
+              <% elsif !User.find(session[:user_id]).is_instructor %>
+                  <a href="/drop_course/<%= session[:user_id] %>/<%= course.id %>">
+                    <button type="button" class="btn btn-outline-secondary"><i class="far fa-trash-alt"></i> Drop</button>
+                  </a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div> 
+</div>

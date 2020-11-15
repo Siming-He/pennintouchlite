@@ -2,7 +2,7 @@
 
 <p>
   <strong>Department:</strong>
-  <%= @course.department %>
+  <%= Department.find(@course.department_id)[:name] %>
 </p>
 
 <p>
@@ -20,5 +20,11 @@
   <%= @course.description %>
 </p>
 
-<%= link_to 'Edit', edit_course_path(@course) %> |
-<%= link_to 'Back', courses_path %>
+<% if User.find(session[:user_id]).is_instructor && @course.users.include?(User.find(session[:user_id])) %>
+  <a href="<%= edit_course_path(@course) %>">
+    <button type="button" class="btn btn-outline-primary">Edit</button>
+  </a>
+<% end %>
+<a href="<%= courses_path %>">
+    <button type="button" class="btn btn-outline-primary">Back</button>
+</a>

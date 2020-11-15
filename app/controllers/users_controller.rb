@@ -3,6 +3,7 @@ require 'pry'
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user, except: [:new, :create]
+  before_action :ensure_admin_user, only: [:edit, :update, :destroy]
   
   # GET /users
   # GET /users.json
@@ -79,5 +80,9 @@ class UsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:first_name, :last_name, :pennkey, :is_instructor, :password_hash)
+    end
+
+    def ensure_admin_user
+      redirect_to users_path unless (@user == User.find(session[:user_id]))
     end
 end

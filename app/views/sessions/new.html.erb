@@ -1,6 +1,10 @@
 <h1> Log In </h1>
 
-<% if flash.now[:notice] %>
+<% if flash.now[:notice] == "User was successfully created." %>
+<div class="alert alert-success" role="alert">
+  <%= flash.now[:notice] %>
+</div>
+<% elsif flash.now[:notice] == "PennKey or Password Incorrect" %>
 <div class="alert alert-danger" role="alert">
   <%= flash.now[:notice] %>
 </div>

@@ -1,17 +1,35 @@
+<script src="https://kit.fontawesome.com/1d9373cc66.js" crossorigin="anonymous"></script>
+
 <div class="container">
   <p id="notice"><%= notice %></p>
   <h1>Courses</h1>
+  <% if User.find(session[:user_id]).is_instructor %>
+    <a href="<%= new_course_path %>">
+      <button type="button" class="btn btn-secondary"><i class="far fa-plus-square"></i> New Course</button>
+    </a>
+  <% end %>
   <div class="row">
     <% @courses.each do |course| %>
       <div class="col-6" style="padding: 10px;">
         <div class="card" style="width: 100%;">
           <div class="card-body">
             <h5 class="card-title"><%= course.full_code() %></h5>
-            <h6 class="card-sibtitle mb-4 text-secondary"><%= course.instructor() %></h6>
+            <h6 class="card-sibtitle mb-4 text-secondary">
+              <%= course.instructor_name() %>
+            </h6>
             <p class="card-text"><%= course.description.first(120) %></p>
             <a href="/courses/<%= course.id %>">
               <button type="button" class="btn btn-secondary">Show</button>
             </a>
+            <% if User.find(session[:user_id]).is_instructor && course.instructor() == User.find(session[:user_id]) %>
+              <a href="<%= edit_course_path(course) %>">
+              <button type="button" class="btn btn-outline-secondary"><i class="far fa-edit"></i> Edit</button>
+              </a>
+            <% elsif !User.find(session[:user_id]).is_instructor && !course.students.include?(User.find(session[:user_id])) %>
+                <a href="/add_course/<%= session[:user_id] %>/<%= course.id %>">
+                  <button type="button" class="btn btn-outline-secondary"><i class="far fa-plus-square"></i> Add</button>
+                </a>
+            <% end %>
           </div>
         </div>
       </div>
@@ -20,5 +38,3 @@
 </div>
 
 <br>
-
-<%= link_to 'New Course', new_course_path %>
