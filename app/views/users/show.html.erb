@@ -60,7 +60,7 @@
                 <a href="/courses/<%= course.id %>/edit">
                 <button type="button" class="btn btn-outline-secondary"><i class="far fa-edit"></i> Edit</button>
                 </a>
-              <% elsif !User.find(session[:user_id]).is_instructor %>
+              <% elsif !User.find(session[:user_id]).is_instructor &&  User.find(session[:user_id]).courses.include?(course)%>
                   <a href="/drop_course/<%= session[:user_id] %>/<%= course.id %>">
                     <button type="button" class="btn btn-outline-secondary"><i class="far fa-trash-alt"></i> Drop</button>
                   </a>
