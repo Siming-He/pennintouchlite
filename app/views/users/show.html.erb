@@ -36,14 +36,14 @@
 </a>
 
 <div class="container">
-  <% if User.find(session[:user_id]).is_instructor %>
+  <% if User.find(params[:id]).is_instructor %>
     <h2>Courses Teaching</h2>
   <% else %>
     <h2>Courses Taking</h2>
   <% end %>
 
   <div class="row">
-    <% User.find(session[:user_id]).courses.each do |course| %>
+    <% User.find(params[:id]).courses.each do |course| %>
       <% if course.users.include?(User.find(params[:id])) %>
         <div class="col-6" style="padding: 10px;">
           <div class="card" style="width: 100%;">

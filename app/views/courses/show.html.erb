@@ -17,7 +17,7 @@
 
 <p>
   <strong>Description:</strong>
-  <%= @course.description %>
+  <p class="text-break"><%= @course.description %></p>
 </p>
 
 <% if User.find(session[:user_id]).is_instructor && @course.users.include?(User.find(session[:user_id])) %>
