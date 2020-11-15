@@ -1,6 +1,23 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Courses</h1>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <h1>Courses</h1>
+  <div class="row">
+    <% @courses.each do |course| %>
+      <div class="col-6" style="padding: 10px;">
+        <div class="card" style="width: 100%;">
+          <div class="card-body">
+            <h5 class="card-title"><%= course.full_code() %></h5>
+            <h6 class="card-sibtitle mb-4 text-secondary"><%= course.instructor() %></h6>
+            <p class="card-text"><%= course.description.first(120) %></p>
+            <%a href="/courses/#{course.id}" %>
+              <button type="button" class="btn btn-outline-secondary">Show</Button>
+            </a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div> 
+</div>
 
 <table>
   <thead>

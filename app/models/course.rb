@@ -11,7 +11,8 @@ class Course < ApplicationRecord
 
   def instructor
     course = Course.find(id)
-    course.users.find_by(is_instructor: true)
+    user_cur = course.users.find_by(is_instructor: true)
+    user_cur[:first_name] + ", " + user_cur[:last_name]
   end
 
   def instructor=(user)
